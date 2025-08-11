@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Моїй Коханій</title>
+<style>
+  :root { 
+    --bg: #061015; 
+    --wind-strength: 0.5;
+  }
+  
+  html,body{
+    height:100%;
+    margin:0;
+    background: linear-gradient(180deg,var(--bg) 0%, #07121a 60%, #0b151a 100%);
+    overflow:hidden;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+
+  .glow{
+    position:absolute; left:0; right:0; top:0; bottom:0;
+    pointer-events:none;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, transparent 30%);
+    mix-blend-mode: screen;
+    z-index:0;
+  }
+
+  .big-text{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size: clamp(24px, 6vw, 72px);
+    font-weight: bold;
+    color: #ff6b6b;
+    text-shadow: 0 0 10px rgba(255,0,0,0.8), 0 0 20px rgba(255,0,0,0.6);
+    animation: glowText 2s ease-in-out infinite alternate;
+    z-index: 10;
+    pointer-events: none;
+    text-align: center;
+    max-width: 90%;
+  }
+  
+  @keyframes glowText {
+    from { text-shadow: 0 0 10px rgba(255,0,0,0.8), 0 0 20px rgba(255,0,0,0.6); }
+    to { text-shadow: 0 0 20px rgba(255,0,0,1), 0 0 40px rgba(255,0,0,0.8); }
+  }
+
+  .heart{
+    position:absolute;
+    width:12px;
+    height:12px;
+    background:#ff1744;
+    transform:rotate(45deg);
+    animation: heartFloat 3s ease-out forwards;
+    z-index:9;
+    filter: drop-shadow(0 2px 4px rgba(255,23,68,0.4));
+  }
+  
+  .heart:before, .heart:after{
+    content:"";
+    position:absolute;
+    width:12px;
+    height:12px;
+    background:#ff1744;
+    border-radius:50%;
+  }
+  .heart:before{ top:-6px; left:0; }
+  .heart:after{ top:0; left:-6px; }
+  
+  @keyframes heartFloat {
+    0%{ 
+      opacity:1; 
+      transform:translateY(0) translateX(0) scale(1) rotate(45deg);
+    }
+    25%{ 
+      opacity:0; 
+      transform:translateY(-25vh) translateX(-10px) scale(0.7) rotate(45deg);
+    }
+    100%{ 
+      opacity:0; 
+      transform:translateY(-25vh) translateX(-10px) scale(0.7) rotate(45deg);
+    }
+  }
+
+  /* Квіти */
+  .flower{
+    position:absolute;
+    bottom:0;
+    pointer-events:none;
+    transform-origin: bottom center;
+    will-change: transform, opacity;
+    animation: growFlower 2s ease-out forwards, windSway 4s ease-in-out infinite;
+    z-index:3;
+  }
+  
+  @keyframes growFlower {
+    0% { transform: scaleY(0) translateX(0); opacity:0; }
+    50% { opacity:1; }
+    100% { transform: scaleY(1) translateX(0); opacity:1; }
+  }
+  
+  @keyframes windSway {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(2px) rotate(0.5deg); }
+    75% { transform: translateX(-2px) rotate(-0.5deg); }
+  }
+  
+  @keyframes fadeFlower {
+    0% { opacity:1; transform: scale(1); }
+    100% { opacity:0; transform: scale(0.9); }
+  }
+  
+  .stem{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:0;
+    width:4px;
+    background: linear-gradient(to top, #2d5016, #4a7c1a, #2d5016);
+    border-radius:2px;
+    box-shadow: inset 0 0 2px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2);
+    z-index:2;
+  }
+  
+  .flower-head{
+    position:absolute;
+    left:50%;
+    bottom:0;
+    transform:translateX(-50%);
+    z-index:4;
+  }
+  
+  .petal{ 
+    position:absolute; 
+    transform-origin:center bottom;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  }
+  
+  .center{ 
+    position:absolute; 
+    left:50%; 
+    top:50%;
+    transform:translate(-50%, -50%); 
+    border-radius:50%; 
+    z-index:5; 
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  /* Троянда */
+  .rose .petal {
+    width: 16px;
+    height: 20px;
+  }
+  .rose .center {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Тюльпан */
+  .tulip .petal {
+    width: 14px;
+    height: 25px;
+    border-radius: 50% 50% 80% 80% / 60% 60% 40% 40%;
+  }
+  .tulip .center {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* Соняшник */
+  .sunflower .petal {
+    width: 8px;
+    height: 18px;
+    border-radius: 40% 40% 60% 60%;
+  }
+  .sunflower .center {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Лаванда */
+  .lavender .flower-head {
+    height: 40px;
+  }
+  .lavender .petal {
+    width: 3px;
+    height: 6px;
+    border-radius: 50%;
+    margin: 1px;
+  }
+
+  /* Незабудка */
+  .forgetmenot .petal {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .forgetmenot .center {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Мак */
+  .poppy .petal {
+    width: 18px;
+    height: 22px;
+    border-radius: 50% 10% 50% 10%;
+  }
+  .poppy .center {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Ромашка */
+  .daisy .petal {
+    width: 6px;
+    height: 16px;
+    border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+  }
+  .daisy .center {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Півонія */
+  .peony .petal {
+    width: 20px;
+    height: 16px;
+    border-radius: 50%;
+  }
+  .peony .center {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Листочки */
+  .leaf {
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    background: linear-gradient(45deg, #2d5016, #4a7c1a);
+    border-radius: 0 100% 0 100%;
+    transform-origin: bottom center;
+  }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="big-text">Я кохаю тебе, Катя ❤️</div>
+
+<script>
+const FLOWER_TYPES = ['tulip','sunflower','lavender','rose','forgetmenot','poppy','daisy','peony'];
+
+const FLOWER_PALETTES = {
+  tulip: ['#ff6b6b','#ff9aa2','#ff7ab6','#ff4d6d','#ffb3ba'],
+  sunflower: ['#ffd54a','#ffca28','#ffc107','#ffb300','#ffe082'],
+  lavender: ['#8a6dd8','#9b7be6','#7b5fe0','#a88df0','#b39ddb'],
+  rose: ['#c43b5a','#e24a6b','#b23a53','#d14b6a','#f06292'],
+  forgetmenot: ['#6ec0ff','#7fd7ff','#a7e6ff','#89d5ff','#81c7e8'],
+  poppy: ['#ff5722','#ff7043','#ff6f00','#ff8a50','#ffab40'],
+  daisy: ['#ffffff','#f5f5f5','#fafafa','#eeeeee','#e8eaf6'],
+  peony: ['#e91e63','#f06292','#ec407a','#f48fb1','#f8bbd9']
+};
+
+const FLOWER_CENTERS = {
+  tulip: '#2e7d32',
+  sunflower: '#5d4037',
+  lavender: '#4a148c',
+  rose: '#ffeb3b',
+  forgetmenot: '#ffeb3b',
+  poppy: '#1b5e20',
+  daisy: '#ffeb3b',
+  peony: '#4a148c'
+};
+
+const PETAL_COUNTS = {
+  tulip: 6,
+  sunflower: 16,
+  lavender: 12,
+  rose: 8,
+  forgetmenot: 5,
+  poppy: 4,
+  daisy: 12,
+  peony: 10
+};
+
+const TARGET_FLOWERS = 25;
+let flowerPositions = [];
+
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function randFloat(min,max){ return min + Math.random()*(max-min); }
+
+function getSpawnX(minDist=100){
+  let attempt=0;
+  while(attempt<50){
+    const x = randFloat(60, window.innerWidth-60);
+    if(flowerPositions.every(px=>Math.abs(px-x) > minDist)){
+      flowerPositions.push(x);
+      return x;
+    }
+    attempt++;
+  }
+  const x = randFloat(60, window.innerWidth-60);
+  flowerPositions.push(x);
+  return x;
+}
+
+function spawnHearts(flowerEl){
+  const rect = flowerEl.getBoundingClientRect();
+  const centerX = rect.left + rect.width/2;
+  const centerY = rect.top + rect.height/2;
+  
+  for(let i=0;i<randFloat(2,4);i++){
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.style.left = (centerX + randFloat(-15,15)) + 'px';
+    h.style.top = (centerY + randFloat(-10,10)) + 'px';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),3000);
+  }
+}
+
+function createFlower(){
+  const type = rand(FLOWER_TYPES);
+  const flower = document.createElement('div');
+  flower.className = `flower ${type}`;
+  flower.style.left = `${getSpawnX()}px`;
+
+  // Створюємо стебло
+  const stem = document.createElement('div');
+  stem.className = 'stem';
+  stem.style.height = `${randFloat(80, 140)}px`;
+  flower.appendChild(stem);
+
+  // Створюємо листочки на стеблі
+  if(Math.random() > 0.6) {
+    const leaf1 = document.createElement('div');
+    leaf1.className = 'leaf';
+    leaf1.style.left = '-4px';
+    leaf1.style.bottom = '40%';
+    leaf1.style.transform = 'rotate(-30deg)';
+    stem.appendChild(leaf1);
+
+    const leaf2 = document.createElement('div');
+    leaf2.className = 'leaf';
+    leaf2.style.right = '-4px';
+    leaf2.style.bottom = '60%';
+    leaf2.style.transform = 'rotate(30deg)';
+    stem.appendChild(leaf2);
+  }
+
+  // Створюємо головку квітки
+  const flowerHead = document.createElement('div');
+  flowerHead.className = 'flower-head';
+  flowerHead.style.bottom = stem.style.height;
+
+  const palette = FLOWER_PALETTES[type];
+  const petalCount = PETAL_COUNTS[type];
+
+  // Створюємо пелюстки
+  if(type === 'lavender') {
+    // Особлива структура для лаванди
+    for(let i=0; i<20; i++){
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.background = rand(palette);
+      p.style.left = '50%';
+      p.style.bottom = `${i*2}px`;
+      p.style.transform = `translateX(-50%) rotate(${randFloat(-10,10)}deg)`;
+      flowerHead.appendChild(p);
+    }
+  } else {
+    // Звичайні пелюстки для інших квітів
+    for(let i=0; i<petalCount; i++){
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.background = rand(palette);
+      
+      const angle = (360 / petalCount) * i;
+      const radius = type === 'sunflower' ? 25 : type === 'peony' ? 15 : 20;
+      
+      p.style.left = '50%';
+      p.style.top = '50%';
+      p.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(-${radius}px)`;
+      
+      flowerHead.appendChild(p);
+    }
+  }
+
+  // Створюємо центр квітки
+  const center = document.createElement('div');
+  center.className = 'center';
+  center.style.background = FLOWER_CENTERS[type];
+  flowerHead.appendChild(center);
+
+  flower.appendChild(flowerHead);
+  document.body.appendChild(flower);
+
+  // Періодично створюємо сердечка
+  const heartInterval = setInterval(()=>{
+    if(document.body.contains(flower)) {
+      spawnHearts(flower);
+    } else {
+      clearInterval(heartInterval);
+    }
+  }, randFloat(2000, 4000));
+
+  // Видаляємо квітку через 20 секунд
+  setTimeout(()=>{
+    flower.style.animation = 'fadeFlower 2s forwards, windSway 4s ease-in-out infinite';
+    setTimeout(()=>{
+      if(document.body.contains(flower)) {
+        flower.remove();
+        flowerPositions = flowerPositions.filter(px=>Math.abs(px - parseFloat(flower.style.left))>1);
+      }
+      clearInterval(heartInterval);
+    }, 2000);
+  }, 20000);
+}
+
+// Створюємо квіти
+setInterval(()=>{
+  const currentFlowers = document.querySelectorAll('.flower').length;
+  if(currentFlowers < TARGET_FLOWERS){
+    createFlower();
+  }
+}, randFloat(1500, 3000));
+
+// Створюємо перші квіти одразу
+for(let i=0; i<5; i++) {
+  setTimeout(() => createFlower(), i * 500);
+}
+
+</script>
+</body>
+</html>
